@@ -1,6 +1,9 @@
 <?php
 
-use App\Models\Post;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SessionsController;
+use App\Http\Controllers\PostCommentsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,17 +17,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    $posts = Post::all();
+Route::get('/', [PostController::class, 'index'])->name('home');
 
-    return view('posts', [
-        "posts" => $posts
-    ]);
-});
+Route::get('/post/{post:slug}', [PostController::class, 'show']);
+Route::post('/post/{post:slug}/comments', [PostCommentsController::class, 'store']);
 
-Route::get('/post/{post}', function ($slug) {
+Route::get('/register', [RegisterController::class, 'create'])->middleware('guest');
+Route::post('/register', [RegisterController::class, 'store'])->middleware('guest');
 
-    return view('post', [
-        "post" => Post::findOrFail($slug)
-    ]);
-})->where('post', '[A-z_\-]+');
+Route::get('login', [SessionsController::class, 'create'])->middleware('guest');
+Route::post('login', [SessionsController::class, 'store'])->middleware('guest');
+
+Route::post('logout', [SessionsController::class, 'destroy'])->middleware('auth');
