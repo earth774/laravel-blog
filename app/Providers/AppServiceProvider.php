@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\Newsletter;
 use App\Services\MailchimpNewsletter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
